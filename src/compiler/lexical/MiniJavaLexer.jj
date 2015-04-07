@@ -108,21 +108,528 @@ TOKEN : /* Strings */
   >
 }
 
-void Goal() :
-{}
+
+Program Goal() :
 {
-  ( MiniJavaToken() )*
-  <EOF>
+  MainClass m;
+  ClassDeclList cl;
+}
+{
+  m = MainClass() cl = ClassDeclarationList() <EOF>
+ { return new Program(m, cl); }
 }
 
-void MiniJavaToken():
-{}
+ClassDeclList ClassDeclarationList() :
 {
-  "class"  |  <IDENTIFIER> | "{" | "public" | "static" | "void" |
-  "main" | "(" | "String"  | "[" | "]" | ")" | "}" | "extends" | ";"
-  | "return" | "," | "int" | "boolean" | "=" | "if" | "else" | "while"
-  | "System.out.println" | "&&" | "<" | "+" | "-" | "*" | "." |
-  "length" | <NUM> | "true" | "false" | "this" | "new" |
-  "!" 
+  ClassDeclList l = new ClassDeclList();
+  ClassDecl cd;
+}
+{
+  (cd = ClassDeclaration() { l.addElement(cd); })*
+  { return l; }
 }
 
+MainClass MainClass() :
+{
+  Identifier name, args;
+  VarDeclList vl = new VarDeclList();
+  StatementList stl = new StatementList();
+}
+{
+  <CLASS> name = Identifier()
+  <LBRACE>
+    <PUBLIC> <STATIC> <VOID> <MAIN>
+    <LPAREN>
+      <STRING> <LBRACKET> <RBRACKET> args = Identifier()
+    <RPAREN>
+    <LBRACE>
+      [VarDeclarationOrStatement(vl, stl)]
+    <RBRACE>
+  <RBRACE>
+  { return new MainClass(name, args, vl, stl); }
+}
+
+ClassDecl ClassDeclaration() :
+{
+  ClassDecl c;
+  Identifier name;
+}
+{
+        <CLASS> name = Identifier() c = ClassDeclarationEnd(name)
+  { return c; }
+}
+
+ClassDecl ClassDeclarationEnd(Identifier name) :
+{
+  Identifier extendsId;
+  VarDeclList vl = new VarDeclList();
+  MethodDeclList ml;
+}
+{
+  <EXTENDS> extendsId = Identifier()
+  <LBRACE>
+    VarDeclarationList(vl)
+    ml = MethodDeclarationList()
+  <RBRACE>
+  { return new ClassDeclExtends(name, extendsId, vl, ml); }
+
+  |
+
+  <LBRACE>
+    VarDeclarationList(vl)
+    ml = MethodDeclarationList()
+  <RBRACE>
+  { return new ClassDeclSimple(name, vl, ml); }
+}
+
+void VarDeclarationList(VarDeclList vl) : {}
+{
+  (VarDeclaration(vl))*
+}
+
+void VarDeclaration(VarDeclList vl) :
+{
+  Type t;
+  Identifier id;
+}
+{
+  t = Type() id = Identifier() <SEMI>
+  { vl.addElement(new VarDecl(t, id)); }
+}
+
+MethodDeclList MethodDeclarationList() :
+{
+  MethodDeclList ml = new MethodDeclList();
+  MethodDecl m;
+}
+{
+  (m = MethodDeclaration() { ml.addElement(m); })*
+  { return ml; }
+}
+
+MethodDecl MethodDeclaration() :
+{
+  Type returnT;
+  Identifier name;
+  FormalList params;
+  VarDeclList varL = new VarDeclList();
+  StatementList stmtL = new StatementList();
+  Exp returnE;
+}
+{
+  <PUBLIC> returnT = Type() name = Identifier()
+  <LPAREN>
+    params = FormalParameterList()
+  <RPAREN>
+  <LBRACE>
+    [VarDeclarationOrStatement(varL, stmtL)]
+    <RETURN> returnE = Expression() <SEMI>
+  <RBRACE>
+  {
+    return new MethodDecl(
+      returnT, name, params, varL, stmtL, returnE
+    );
+  }
+}
+
+FormalList FormalParameterList() :
+{
+  FormalList fl = new FormalList();
+  Formal f;
+}
+{
+  [
+    f = FormalParameter()
+    { fl.addElement(f); }
+    (<COMMA> f = FormalParameter() { fl.addElement(f); })*
+  ]
+  { return fl; }
+}
+
+Formal FormalParameter() :
+{
+  Type varT;
+  Identifier name;
+}
+{
+  varT = Type() name = Identifier()
+  { return new Formal(varT, name); }
+}
+
+void VarDeclarationOrStatement(VarDeclList vl, StatementList stl) :
+{
+  Statement stmt;
+  Identifier id;
+  Type t;
+}
+{
+   (
+     t = ArrayOrIntegerType() |
+     t = BooleanType()
+   )
+   VarDeclarationEnd(t, vl, stl)
+ |
+   (
+     stmt = Block() |
+     stmt = IfStatement() |
+     stmt = WhileStatement() |
+     stmt = PrintStatement()  
+   )
+   { stl.addElement(stmt); }
+   Statements(stl)
+ |
+   id = Identifier() IdentifierDeclarationOrStatement(id, vl, stl)
+}
+
+void IdentifierDeclarationOrStatement(Identifier id1, VarDeclList vl, StatementList stl) :
+{
+  Identifier id2;
+  Statement stmt;
+  Type t = new IdentifierType(id1.toString());
+}
+{
+   singleVarDecl(t,vl,stl) (<COMMA> singleVarDecl(t,vl,stl))* <SEMI>
+   VarDeclarationOrStatement(vl, stl)
+ |
+   stmt = IdentifierStatementTail(id1)
+   { stl.addElement(stmt); }
+   Statements(stl)
+}
+
+Statement IdentifierStatementTail(Identifier id) :
+{
+  Exp e1, e2;
+  ExpList el = new ExpList();
+  Identifier idM;
+  Call callExp;
+  Statement assign;
+}
+{
+    <LBRACKET> e1 = Expression() <RBRACKET>
+    assign = CompoundArrayAssignment(id, e1)
+    { return assign; }
+  |
+    assign = CompoundAssignment(id) <SEMI>
+    { return assign; }
+}
+
+Statement CompoundArrayAssignment(Identifier arrayVar, Exp indexExp) :
+{
+  Exp v;
+}
+{
+  <ASSIGN> v = Expression() <SEMI>
+  { return new ArrayAssign(arrayVar, indexExp, v); }
+}
+
+Statement CompoundAssignment(Identifier var) :
+{
+  Exp v;
+}
+{
+   <ASSIGN> v = Expression()
+   { return new Assign(var, v); }
+}
+
+Type ArrayOrIntegerType() :
+{}
+{
+  <INT>
+  [<LBRACKET> <RBRACKET> { return IntArrayType.instance(); }]
+  { return IntegerType.instance(); }
+}
+
+Type BooleanType() :
+{}
+{
+  <BOOLEAN>
+  { return BooleanType.instance(); }
+}
+
+void VarDeclarationEnd(Type t, VarDeclList vl, StatementList stl) :
+{
+  Identifier id;
+}
+{
+  singleVarDecl(t,vl,stl) (<COMMA> singleVarDecl(t,vl,stl))* <SEMI>
+  VarDeclarationOrStatement(vl, stl)
+}
+
+void singleVarDecl(Type t, VarDeclList vl, StatementList stl) :
+{
+  Identifier id;
+  Exp e;
+}
+{
+  id = Identifier()
+  [<ASSIGN> e = Expression() { stl.addElement(new Assign(id, e)); }]
+  { vl.addElement(new VarDecl(t, id)); }
+}
+
+Statement Block() :
+{
+  StatementList stmtL = new StatementList();
+}
+{
+  <LBRACE> Statements(stmtL) <RBRACE>
+  { return new Block(stmtL); }
+}
+
+Statement IfStatement() :
+{
+  Exp e;
+  Statement s1, s2;
+}
+{
+  <IF> <LPAREN> e = Expression() <RPAREN>
+    s1 = Statement()
+  <ELSE>
+    s2 = Statement()
+  { return new If(e, s1, s2); }
+}
+
+Statement WhileStatement() :
+{
+  Exp e;
+  Statement stmt;
+}
+{
+  <WHILE> <LPAREN> e = Expression() <RPAREN> stmt = Statement()
+  { return new While(e, stmt); }
+}
+
+Statement PrintStatement() :
+{
+  Exp e;
+}
+{
+  <PRINT> <LPAREN> e = Expression() <RPAREN> <SEMI>
+  { return new Print(e); }
+}
+
+void Statements(StatementList stl) :
+{
+  Statement stmt;
+}
+{
+  (stmt = Statement() { stl.addElement(stmt); })*
+}
+
+Statement Statement() :
+{
+  Identifier id;
+  Statement stmt;
+}
+{
+   (
+     stmt = Block() |
+     stmt = IfStatement() |
+     stmt = WhileStatement() |
+     stmt = PrintStatement() 
+   )
+   { return stmt; }
+ |
+   id = Identifier() stmt = IdentifierStatementTail(id)
+   { return stmt; }
+}
+
+Type Type() :
+{
+  Type t;
+  Identifier id;
+}
+{
+   t = ArrayOrIntegerType()
+   { return t; }
+ | t = BooleanType()
+   { return t; }
+ | id = Identifier()
+   { return new IdentifierType(id.toString()); }
+}
+
+Exp Expression() :
+{
+  Exp e;
+}
+{
+  e = AndExpression()
+  { return e; }
+}
+
+Exp AndExpression() :
+{
+  Exp x, y;
+}
+{
+  x = CompareExpression()
+  (
+    <AND> y = CompareExpression()
+    { x = new And(x, y); }
+  )*
+  { return x; }
+}
+
+Exp CompareExpression() :
+{
+  Exp x, y;
+}
+{
+  x = AdditiveExpression()
+  [
+      <LESS> y = AdditiveExpression()
+      { x = new LessThan(x, y); }
+  ]
+  { return x; }
+}
+
+Exp AdditiveExpression() :
+{
+  Exp x, y;
+}
+{
+  x = TimesExpression()
+  (
+      <ADD> y = TimesExpression() { x = new Plus(x, y); }
+    |
+      <SUB> y = TimesExpression() { x = new Minus(x, y); }
+  )*
+  { return x; }
+}
+
+Exp TimesExpression() :
+{
+  Exp x, y;
+}
+{
+  x = PrefixExpression()
+  (
+      <MULT> y = PrefixExpression()
+      { x = new Times(x, y); }
+  )*
+  { return x; }
+}
+
+Exp PrefixExpression() :
+{
+  Exp x;
+  int c = 0;
+}
+{
+    (<NOT> { ++c; })* x = PostFixExpression()
+    {
+      for (int i = 0; i < c; ++i) x = new Not(x);
+      return x;
+    }
+}
+
+Exp PostFixExpression() :
+{
+  Exp e, pr;
+}
+{
+  pr = PrimaryExpression()
+  [
+     e = ArrayLookup(pr) { return e; }
+   | e = ArrayLengthOrMethodCall(pr) { return e; }
+  ]
+  { return pr; }
+}
+
+Exp PrimaryExpression() :
+{
+  Exp e;
+  Identifier id;
+}
+{
+   e = IntegerLiteral()
+   { return e; }
+ | <TRUE>
+   { return new True(); }
+ | <FALSE>
+   { return new False(); }
+ | id = Identifier()
+   { return new Identifier(id); }
+ | <THIS>
+   { return new This(); }
+ | <LPAREN> e = Expression() <RPAREN>
+   { return e; }
+ | <NEW> e = ArrayOrObjectAllocation()
+   { return e; }
+}
+
+Exp ArrayOrObjectAllocation() :
+{
+  Identifier id;
+  Exp e;
+}
+{
+   <INT> <LBRACKET> e = Expression() <RBRACKET>
+   { return new NewArray(e); }
+ | id = Identifier() <LPAREN> <RPAREN>
+   { return new NewObject(id); }
+}
+
+Exp IntegerLiteral() :
+{
+  Token t;
+  int num;
+}
+{
+  t = <NUM>
+  {
+    num = Integer.valueOf(t.image);
+    return new IntegerLiteral(num);
+  }
+}
+
+Exp ArrayLookup(Exp pr) :
+{
+  Exp e;
+}
+{
+  <LBRACKET> e = Expression() <RBRACKET>
+  { return new ArrayLookup(pr, e); }
+}
+
+Exp ArrayLengthOrMethodCall(Exp pr) :
+{
+  Exp e;
+}
+{
+  <DOT> e = ArrayLengthOrMethodCallTail(pr)
+  { return e; }
+}
+
+Exp ArrayLengthOrMethodCallTail(Exp pr) :
+{
+  Identifier id;
+  ExpList el = new ExpList();
+}
+{
+   <LENGTH>
+   { return new ArrayLength(pr); }
+ |
+   id = Identifier() <LPAREN> [ExpressionList(el)] <RPAREN>
+   { return new Call(pr, id, el); }
+}
+
+void ExpressionList(ExpList el) :
+{
+  Exp e;
+}
+{
+  e = Expression()
+  { el.addElement(e); }
+  (
+    <COMMA> e = Expression()
+    { el.addElement(e); }
+  )*
+}
+
+Identifier Identifier() :
+{
+  Token t;
+}
+{
+  t = <IDENTIFIER> { return new Identifier(t.image, t); }
+}
