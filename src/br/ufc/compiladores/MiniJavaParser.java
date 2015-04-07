@@ -2,6 +2,154 @@
 package br.ufc.compiladores;
         public class MiniJavaParser implements MiniJavaParserConstants {
 
+  static final public void Goal() throws ParseException {
+    label_1:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INT:
+      case VOID:
+      case STRING:
+      case BOOLEAN:
+      case MAIN:
+      case LENGTH:
+      case PRINT:
+      case IF:
+      case ELSE:
+      case CLASS:
+      case WHILE:
+      case PUBLIC:
+      case RETURN:
+      case STATIC:
+      case EXTENDS:
+      case ADD:
+      case SUB:
+      case MULT:
+      case AND:
+      case LESS:
+      case ASSIGN:
+      case LPAREN:
+      case RPAREN:
+      case LBRACKET:
+      case RBRACKET:
+      case LBRACE:
+      case RBRACE:
+      case COMMA:
+      case DOT:
+      case SEMI:
+      case IDENTIFIER:
+        ;
+        break;
+      default:
+        jj_la1[0] = jj_gen;
+        break label_1;
+      }
+      MiniJavaToken();
+    }
+    jj_consume_token(0);
+  }
+
+  static final public void MiniJavaToken() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case CLASS:
+      jj_consume_token(CLASS);
+      break;
+    case IDENTIFIER:
+      jj_consume_token(IDENTIFIER);
+      break;
+    case LBRACE:
+      jj_consume_token(LBRACE);
+      break;
+    case PUBLIC:
+      jj_consume_token(PUBLIC);
+      break;
+    case STATIC:
+      jj_consume_token(STATIC);
+      break;
+    case VOID:
+      jj_consume_token(VOID);
+      break;
+    case MAIN:
+      jj_consume_token(MAIN);
+      break;
+    case LPAREN:
+      jj_consume_token(LPAREN);
+      break;
+    case STRING:
+      jj_consume_token(STRING);
+      break;
+    case LBRACKET:
+      jj_consume_token(LBRACKET);
+      break;
+    case RBRACKET:
+      jj_consume_token(RBRACKET);
+      break;
+    case RPAREN:
+      jj_consume_token(RPAREN);
+      break;
+    case RBRACE:
+      jj_consume_token(RBRACE);
+      break;
+    case EXTENDS:
+      jj_consume_token(EXTENDS);
+      break;
+    case SEMI:
+      jj_consume_token(SEMI);
+      break;
+    case RETURN:
+      jj_consume_token(RETURN);
+      break;
+    case COMMA:
+      jj_consume_token(COMMA);
+      break;
+    case INT:
+      jj_consume_token(INT);
+      break;
+    case BOOLEAN:
+      jj_consume_token(BOOLEAN);
+      break;
+    case ASSIGN:
+      jj_consume_token(ASSIGN);
+      break;
+    case IF:
+      jj_consume_token(IF);
+      break;
+    case ELSE:
+      jj_consume_token(ELSE);
+      break;
+    case WHILE:
+      jj_consume_token(WHILE);
+      break;
+    case PRINT:
+      jj_consume_token(PRINT);
+      break;
+    case AND:
+      jj_consume_token(AND);
+      break;
+    case LESS:
+      jj_consume_token(LESS);
+      break;
+    case ADD:
+      jj_consume_token(ADD);
+      break;
+    case SUB:
+      jj_consume_token(SUB);
+      break;
+    case MULT:
+      jj_consume_token(MULT);
+      break;
+    case DOT:
+      jj_consume_token(DOT);
+      break;
+    case LENGTH:
+      jj_consume_token(LENGTH);
+      break;
+    default:
+      jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
   static public MiniJavaParserTokenManager token_source;
@@ -12,7 +160,7 @@ package br.ufc.compiladores;
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[0];
+  static final private int[] jj_la1 = new int[2];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -20,10 +168,10 @@ package br.ufc.compiladores;
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {};
+      jj_la1_0 = new int[] {0xfeef1e00,0xfeef1e00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {};
+      jj_la1_1 = new int[] {0xbffa,0xbffa,};
    }
 
   /** Constructor with InputStream. */
@@ -44,7 +192,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -58,7 +206,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -75,7 +223,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -85,7 +233,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -101,7 +249,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -110,7 +258,7 @@ package br.ufc.compiladores;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 0; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 2; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -166,7 +314,7 @@ package br.ufc.compiladores;
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 0; i++) {
+    for (int i = 0; i < 2; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

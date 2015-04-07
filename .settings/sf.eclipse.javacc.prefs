@@ -1,13 +1,13 @@
-CLEAR_CONSOLE=false
+CLEAR_CONSOLE=true
 JAVACC_OPTIONS=
 JJDOC_OPTIONS=
 JJTREE_OPTIONS=
 JJ_NATURE=true
-JTB_OPTIONS=
+JTB_OPTIONS=-ia -jd -tk
 KEEP_DEL_FILES_IN_HISTORY=false
 MARK_GEN_FILES_AS_DERIVED=true
-RUNTIME_JJJAR=/home/0322848/Downloads/eclipse/plugins/sf.eclipse.javacc_1.5.30/javacc-5.0.jar
-RUNTIME_JTBJAR=/home/0322848/Downloads/eclipse/plugins/sf.eclipse.javacc_1.5.30/jtb-1.4.9.jar
+RUNTIME_JJJAR=C\:\\Users\\gustavo\\eclipse\\plugins\\sf.eclipse.javacc_1.5.30\\javacc.jar
+RUNTIME_JTBJAR=C\:\\Users\\gustavo\\eclipse\\plugins\\sf.eclipse.javacc_1.5.30\\jtb-1.4.9.jar
 RUNTIME_JVMOPTIONS=
 SUPPRESS_WARNINGS=false
 eclipse.preferences.version=1
