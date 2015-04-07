@@ -8,7 +8,7 @@ options
 }
 
 PARSER_BEGIN(MiniJavaParser)
-package br.ufc.compiladores;
+package compiler.lexical;
 	public class MiniJavaParser{}
 PARSER_END(MiniJavaParser)
 
@@ -114,6 +114,7 @@ void Goal() :
   ( MiniJavaToken() )*
   <EOF>
 }
+
 void MiniJavaToken():
 {}
 {
@@ -121,6 +122,7 @@ void MiniJavaToken():
   "main" | "(" | "String"  | "[" | "]" | ")" | "}" | "extends" | ";"
   | "return" | "," | "int" | "boolean" | "=" | "if" | "else" | "while"
   | "System.out.println" | "&&" | "<" | "+" | "-" | "*" | "." |
-  "length"
+  "length" | <NUM> | "true" | "false" | "this" | "new" |
+  "!" 
 }
 

@@ -1,4 +1,7 @@
-package br.ufc.compiladores;
+package compiler;
+
+import compiler.lexical.MiniJavaParser;
+import compiler.lexical.ParseException;
 
 public class Main {
 
@@ -7,6 +10,7 @@ public class Main {
 	 */
 
 	public static void main(String[] args) {
+		System.out.println("escreve:");
 		try {
 			new MiniJavaParser(System.in).Goal();
 			System.out.println("Lexical analysis successfull");
