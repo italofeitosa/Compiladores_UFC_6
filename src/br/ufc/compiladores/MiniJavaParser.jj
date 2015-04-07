@@ -1,7 +1,109 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(MiniJavaParser)package br.ufc.compiladores;
-  public class MiniJavaParser {}
+ */
+options
+{
+  JDK_VERSION = "1.5";
+  static = true;
+}
+
+PARSER_BEGIN(MiniJavaParser)
+package br.ufc.compiladores;
+	public class MiniJavaParser{}
 PARSER_END(MiniJavaParser)
 
-SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}void sum() :{}{  term()  (    (      < PLUS >    | < MINUS >    )    term()  )*}void term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}
+SKIP : /* WHITE SPACE */
+{
+  " " | "\t" | "\n" | "\r" | "\f"
+}
+
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+
+}
+
+TOKEN : /* Keywords */
+{
+   < INT       : "int" >
+ | < VOID      : "void" >
+ | < STRING    : "String" >
+ | < BOOLEAN   : "boolean" >
+
+ | < THIS      : "this" >
+ | < TRUE      : "true" >
+ | < FALSE     : "false" >
+
+ | < MAIN      : "main" >
+ | < LENGTH    : "length" >
+ | < PRINT     : "System.out.println" >
+
+ | < IF        : "if" >
+ | < NEW       : "new" >
+ | < ELSE      : "else" >
+ | < CLASS     : "class" >
+ | < WHILE     : "while" >
+ | < FOR       : "for" >
+ | < PUBLIC    : "public" >
+ | < RETURN    : "return" >
+ | < STATIC    : "static" >
+ | < EXTENDS   : "extends" >
+}
+
+TOKEN : /* Operators */
+{
+   < ADD  : "+" >
+ | < SUB  : "-" >
+ | < MULT : "*" >
+ | < DIV  : "/" >
+
+ | < AND  : "&&" >
+ | < NOT  : "!" >
+ | < LESS : "<" >
+
+ | < ASSIGN : "=" >
+}
+
+TOKEN : /* Separators */
+{
+   < LPAREN  : "(" >
+ | < RPAREN  : ")" >
+ | < LBRACKET : "[" >
+ | < RBRACKET : "]" >
+ | < LBRACE   : "{" >
+ | < RBRACE   : "}" >
+
+ | < COMMA : "," >
+ | < DOT   : "." >
+ | < SEMI  : ";" >
+}
+
+
+TOKEN : /* Numbers */
+{
+  < NUM : "0" | ["1"-"9"](["0"-"9"])* >
+}
+
+
+TOKEN : /* Identifiers */
+{
+    < IDENTIFIER : <LETTER> (<LETTER> | <DIGIT>)* >
+
+  | < #LETTER : "$" | "_" | ["a"-"z","A"-"Z"] >
+  | < #DIGIT :  ["0"-"9"] >
+}
+
+
+TOKEN : /* Strings */
+{
+  < STRING_LITERAL :
+      "\""
+      (
+          ~["\"","\\","\n","\r"]
+        | "\\" ["n","t","b","r","f","\\","'","\""]
+      )*
+      "\""
+  >
+}
