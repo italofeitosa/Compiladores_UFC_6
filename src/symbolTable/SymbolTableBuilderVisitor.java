@@ -168,24 +168,11 @@ public class SymbolTableBuilderVisitor implements Visitor {
 		whileStmt.e.accept(this);
 		whileStmt.s.accept(this);
 	}
-	//TODO Verificar se precisamos do visit para o FOR abaixo
-	//  public void visit(For forStmt) {
-	//    for (Statement stmt : forStmt.init.getList())
-	//      stmt.accept(this);
-	//
-	//    forStmt.boolExpr.accept(this);
-	//
-	//    for (Statement stmt : forStmt.step.getList())
-	//      stmt.accept(this);
-	//
-	//    forStmt.body.accept(this);
-	//  }
+	
 
 	public void visit(Print printStmt) {
 		printStmt.e.accept(this);
 	}
-	//TODO Verificar se precisamos do visit para o PRINTSTR abaixo
-	//  public void visit(PrintString printStr) { }
 
 	public void visit(Assign assignStmt) {
 		checkVar(assignStmt.i.toString());
@@ -203,41 +190,11 @@ public class SymbolTableBuilderVisitor implements Visitor {
 		andExp.e2.accept(this);
 	}
 
-	//TODO Verificar se precisamos do visit para o OR abaixo
-	//  public void visit(Or orExp) {
-	//    orExp.e1.accept(this);
-	//    orExp.e2.accept(this);
-	//  }
-
 	public void visit(LessThan lessExp) {
 		lessExp.e1.accept(this);
 		lessExp.e2.accept(this);
 	}
-	//TODO Verificar se precisamos do visit para o LESSOREQUAL abaixo
-	//  public void visit(LessOrEqual lessOrEqualExp) {
-	//    lessOrEqualExp.e1.accept(this);
-	//    lessOrEqualExp.e2.accept(this);
-	//  }
-	//TODO Verificar se precisamos do visit para o GREATER abaixo
-	//  public void visit(Greater greaterExp) {
-	//    greaterExp.e1.accept(this);
-	//    greaterExp.e2.accept(this);
-	//  }
-	//TODO Verificar se precisamos do visit para o GREATEROREQUAL abaixo
-	//  public void visit(GreaterOrEqual greaterOrEqualExp) {
-	//    greaterOrEqualExp.e1.accept(this);
-	//    greaterOrEqualExp.e2.accept(this);
-	//  }
-	//TODO Verificar se precisamos do visit para o EQUAL abaixo
-	//  public void visit(Equal equalExp) {
-	//    equalExp.e1.accept(this);
-	//    equalExp.e2.accept(this);
-	//  }
-	//TODO Verificar se precisamos do visit para o NOTEQUAL abaixo
-	//  public void visit(NotEqual notEqualExp) {
-	//    notEqualExp.e1.accept(this);
-	//    notEqualExp.e2.accept(this);
-	//  }
+	
 
 	public void visit(Plus plusExp) {
 		plusExp.e1.accept(this);
@@ -253,11 +210,7 @@ public class SymbolTableBuilderVisitor implements Visitor {
 		timesExp.e1.accept(this);
 		timesExp.e2.accept(this);
 	}
-	//TODO Verificar se precisamos do visit para o DIV abaixo
-	//  public void visit(Div divExp) {
-	//    divExp.e1.accept(this);
-	//    divExp.e2.accept(this);
-	//  }
+	
 
 	public void visit(ArrayLookup arrayLookup) {
 		arrayLookup.e1.accept(this);
@@ -270,10 +223,9 @@ public class SymbolTableBuilderVisitor implements Visitor {
 
 	//TODO  Verificar a expereção
 	public void visit(Call callStmt) {
-		/*callStmt.e.accept(this);
-
+		callStmt.e.accept(this);
 		for (Exp expr : callStmt.el.getList())
-			expr.accept(this);*/
+			expr.accept(this);
 	}
 
 	public void visit(IntegerLiteral intLiteral) {

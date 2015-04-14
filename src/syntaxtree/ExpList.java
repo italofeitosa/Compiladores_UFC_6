@@ -3,6 +3,7 @@ package syntaxtree;
 import java.util.List;
 import java.util.Vector;
 
+
 public class ExpList {
    private Vector list;
 
@@ -22,7 +23,8 @@ public class ExpList {
       return list.size(); 
    }
 
-   public List<ExpList> getList() {
-	     return list;
-}
+  
+   public List<Exp> getList(){
+	   return list;
+   }
 }
