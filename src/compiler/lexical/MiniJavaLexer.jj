@@ -9,6 +9,7 @@ options
 
 PARSER_BEGIN(MiniJavaParser)
 package compiler.lexical;
+import syntaxtree.*;
 	public class MiniJavaParser{}
 PARSER_END(MiniJavaParser)
 

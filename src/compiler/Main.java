@@ -1,22 +1,19 @@
 package compiler;
 
+import syntaxtree.Program;
+import visitor.PrettyPrintVisitor;
+
 import compiler.lexical.MiniJavaParser;
 import compiler.lexical.ParseException;
 
 public class Main {
-
-	/**
-	 * @param args
-	 */
-
-	public static void main(String[] args) {
-		System.out.println("escreve:");
-		try {
-			new MiniJavaParser(System.in).Goal();
-			System.out.println("Lexical analysis successfull");
-		} catch (ParseException e) {
-			System.out.println("Lexer Error : \n" + e.toString());
-		}
-	}
-
+   public static void main(String [] args) {
+      try {
+         Program root = new MiniJavaParser(System.in).Goal();
+          root.accept(new PrettyPrintVisitor());
+      }
+      catch (ParseException e) {
+         System.out.println(e.toString());
+      }
+   }
 }
