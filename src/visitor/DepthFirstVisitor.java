@@ -225,4 +225,10 @@ public class DepthFirstVisitor implements Visitor {
   // String s;
   public void visit(Identifier n) {
   }
+
+@Override
+public void visit(VoidType n) {
+	// TODO Auto-generated method stub
+	
+}
 }

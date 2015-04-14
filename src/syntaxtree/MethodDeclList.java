@@ -1,5 +1,6 @@
 package syntaxtree;
 
+import java.util.List;
 import java.util.Vector;
 
 public class MethodDeclList {
@@ -20,4 +21,10 @@ public class MethodDeclList {
    public int size() { 
       return list.size(); 
    }
+   
+	public List<MethodDecl> getList() {
+	     return list;
+	}
+
+
 }

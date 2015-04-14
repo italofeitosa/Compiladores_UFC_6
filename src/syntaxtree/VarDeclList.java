@@ -1,6 +1,8 @@
 package syntaxtree;
 
+import java.util.List;
 import java.util.Vector;
+
 
 public class VarDeclList {
    private Vector list;
@@ -20,4 +22,7 @@ public class VarDeclList {
    public int size() { 
       return list.size(); 
    }
+   public List<VarDecl> getList() {
+	    return list;
+	}
 }

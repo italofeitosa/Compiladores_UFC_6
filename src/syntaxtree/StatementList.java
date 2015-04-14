@@ -6,8 +6,10 @@ import java.util.Vector;
 import visitor.DepthFirstVisitor;
 import visitor.PrettyPrintVisitor;
 import visitor.TypeDepthFirstVisitor;
+import visitor.TypeVisitor;
+import visitor.Visitor;
 
-public class StatementList {
+public class StatementList extends Statement {
 	private Vector<Statement> list;
 
 	public StatementList() {
@@ -42,18 +44,16 @@ public class StatementList {
 		return sb.toString();
 	}
 
-	public void accept(DepthFirstVisitor depthFirstVisitor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void accept(PrettyPrintVisitor prettyPrintVisitor) {
+	@Override
+	public void accept(Visitor v) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void accept(TypeDepthFirstVisitor typeDepthFirstVisitor) {
+	@Override
+	public Type accept(TypeVisitor v) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
 }

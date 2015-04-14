@@ -319,4 +319,10 @@ public class PrettyPrintVisitor implements Visitor {
   public void visit(Identifier n) {
     System.out.print(n.s);
   }
+
+@Override
+public void visit(VoidType n) {
+	// TODO Auto-generated method stub
+	
+}
 }

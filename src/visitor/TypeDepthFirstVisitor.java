@@ -259,4 +259,10 @@ public class TypeDepthFirstVisitor implements TypeVisitor {
   public Type visit(Identifier n) {
     return null;
   }
+
+@Override
+public Type visit(VoidType n) {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

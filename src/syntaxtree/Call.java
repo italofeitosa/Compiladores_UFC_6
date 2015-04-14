@@ -1,4 +1,6 @@
 package syntaxtree;
+import java.util.List;
+
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
@@ -18,4 +20,8 @@ public class Call extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+ /* public List<Call> getList() {
+	     return el;
+}*/
 }

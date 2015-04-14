@@ -16,5 +16,9 @@ public class Block extends Statement {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public String toString() {
+		return "{" + sl + "}\n";
+	}
 }
 

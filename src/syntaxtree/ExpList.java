@@ -1,5 +1,6 @@
 package syntaxtree;
 
+import java.util.List;
 import java.util.Vector;
 
 public class ExpList {
@@ -20,4 +21,8 @@ public class ExpList {
    public int size() { 
       return list.size(); 
    }
+
+   public List<ExpList> getList() {
+	     return list;
+}
 }

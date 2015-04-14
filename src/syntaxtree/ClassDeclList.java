@@ -1,7 +1,7 @@
 package syntaxtree;
 
+import java.util.List;
 import java.util.Vector;
-
 public class ClassDeclList {
    private Vector list;
 
@@ -20,4 +20,8 @@ public class ClassDeclList {
    public int size() { 
       return list.size(); 
    }
+   
+	public List<ClassDecl> getList() {
+		return list;
+	}
 }
