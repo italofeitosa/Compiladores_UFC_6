@@ -17,4 +17,8 @@ public class Program {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public String toString() {
+		return m + "\n" + cl;
+	}
 }
