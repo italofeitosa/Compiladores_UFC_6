@@ -1,7 +1,8 @@
 package syntaxtree;
 
-import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
 public class MainClass {
 	  public Identifier i1,i2;
@@ -18,5 +19,9 @@ public class MainClass {
 
 	  public Type accept(TypeVisitor v) {
 	    return v.visit(this);
+	  }
+	  
+	  public tree.Exp accept(TranslateVisitor v) {
+			return v.visit(this);
 	  }
 	}

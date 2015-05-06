@@ -1,6 +1,7 @@
 package syntaxtree;
-import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
 public class MethodDecl {
   public Type t;
@@ -22,4 +23,8 @@ public class MethodDecl {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

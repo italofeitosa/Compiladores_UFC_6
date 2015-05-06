@@ -1,6 +1,41 @@
 package visitor;
 
-import syntaxtree.*;
+//import syntaxtree.*;
+import syntaxtree.And;
+import syntaxtree.ArrayAssign;
+import syntaxtree.ArrayLength;
+import syntaxtree.ArrayLookup;
+import syntaxtree.Assign;
+import syntaxtree.Block;
+import syntaxtree.BooleanType;
+import syntaxtree.Call;
+import syntaxtree.ClassDeclExtends;
+import syntaxtree.ClassDeclSimple;
+import syntaxtree.False;
+import syntaxtree.Formal;
+import syntaxtree.Identifier;
+import syntaxtree.IdentifierExp;
+import syntaxtree.IdentifierType;
+import syntaxtree.If;
+import syntaxtree.IntArrayType;
+import syntaxtree.IntegerLiteral;
+import syntaxtree.IntegerType;
+import syntaxtree.LessThan;
+import syntaxtree.MainClass;
+import syntaxtree.MethodDecl;
+import syntaxtree.Minus;
+import syntaxtree.NewArray;
+import syntaxtree.NewObject;
+import syntaxtree.Not;
+import syntaxtree.Plus;
+import syntaxtree.Print;
+import syntaxtree.Program;
+import syntaxtree.This;
+import syntaxtree.Times;
+import syntaxtree.True;
+import syntaxtree.VarDecl;
+import syntaxtree.While;
+import translate.Exp;
 
 public interface TranslateVisitor{
     

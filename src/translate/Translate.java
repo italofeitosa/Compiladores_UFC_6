@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import mipsFrame.MipsFrame;
 import symbolTable.Symbol;
 import syntaxtree.And;
 import syntaxtree.ArrayAssign;
@@ -60,15 +61,15 @@ import frame.Access;
 import frame.Frame;
 
 public class Translate implements TranslateVisitor {
-
+	
 	private Frame currFrame;
 	private Frag frags = null;
 	private HashMap<String, Access> vars = null;
 	private HashMap<String, Integer> fieldVars = null;
 	private tree.Exp objPtr = null;
 
-	public Translate(FrameImpl frameImpl) {
-		currFrame = frameImpl;
+	public Translate(MipsFrame mipsFrame) {
+		currFrame = mipsFrame;
 	}
 
 	@Override
@@ -108,8 +109,8 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(ClassDeclExtends n) {
-		for (int i = 0; i < n.methodList.size(); i++)
-			n.methodList.elementAt(i).accept(this);
+		for (int i = 0; i < n.ml.size(); i++)
+			n.ml.elementAt(i).accept(this);
 		return null;
 	}
 
@@ -129,21 +130,21 @@ public class Translate implements TranslateVisitor {
 		int word = currFrame.wordSize();
 
 		Stm method = new SEQ(new LABEL(
-				new Label(n.methodNameId.toString())), null);
+				new Label(n.i.toString())), null);
 
 		List<Boolean> formal = new ArrayList<Boolean>();
-		for (int i = 0; i < n.formalParamList.size(); i++) {
+		for (int i = 0; i < n.fl.size(); i++) {
 			formal.add(false);
 		}
 		Frame oldFrame = currFrame;
 		Frame newFrame = currFrame.newFrame(
-				new Symbol(n.methodNameId.toString()), formal);
+				new Symbol(n.i.toString()), formal);
 		Access ac = currFrame.allocLocal(false);
 
 		// Frame oldFrame = currFrame;
 		currFrame = newFrame;
 
-		for (int i = 1; i < n.formalParamList.size(); i++) {
+		for (int i = 1; i < n.fl.size(); i++) {
 			tree.Exp addr = new BINOP(
 					BINOP.MINUS, new TEMP(currFrame.FP()), new CONST(i * word));
 			Stm form = new MOVE(new TEMP(new Temp()), new MEM(addr));
@@ -151,17 +152,17 @@ public class Translate implements TranslateVisitor {
 			method = new SEQ(method, form);
 		}
 
-		for (int i = 0; i < n.localVarList.size(); i++) {
-			method = new SEQ(method, n.localVarList.elementAt(i).accept(this)
+		for (int i = 0; i < n.vl.size(); i++) {
+			method = new SEQ(method, n.vl.elementAt(i).accept(this)
 					.unNx());
 		}
 
 		objPtr = ac.exp(new ESEQ(new MOVE(new TEMP(currFrame.FP()), new MEM(
 				new TEMP(currFrame.FP()))), new TEMP(currFrame.FP())));
 
-		Stm body = n.statementList.elementAt(0).accept(this).unNx();
-		for (int i = 1; i < n.statementList.size(); i++) {
-			body = new SEQ(body, n.statementList.elementAt(i).accept(this)
+		Stm body = n.sl.elementAt(0).accept(this).unNx();
+		for (int i = 1; i < n.sl.size(); i++) {
+			body = new SEQ(body, n.sl.elementAt(i).accept(this)
 					.unNx());
 		}
 		method = new SEQ(method, body);
@@ -209,8 +210,8 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(Block n) {
-		for (int i = 0; i < n.stmtList.size(); i++) {
-			n.stmtList.elementAt(i).accept(this);
+		for (int i = 0; i < n.sl.size(); i++) {
+			n.sl.elementAt(i).accept(this);
 		}
 		return null;
 	}
@@ -425,7 +426,7 @@ public class Translate implements TranslateVisitor {
 	@Override
 	public Exp visit(Not n) {
 		return new Ex(new BINOP(BINOP.MINUS, new CONST(1),
-				(n.boolExpr.accept(this)).unEx()));
+				(n.e.accept(this)).unEx()));
 	}
 
 	@Override
@@ -450,4 +451,5 @@ public class Translate implements TranslateVisitor {
 			return new MEM(new BINOP(BINOP.PLUS, objPtr, new CONST(0)));
 		}
 	}
-}
+
+	}

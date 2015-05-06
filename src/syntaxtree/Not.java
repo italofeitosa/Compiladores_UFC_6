@@ -1,6 +1,7 @@
 package syntaxtree;
-import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
 public class Not extends Exp {
   public Exp e;
@@ -15,5 +16,9 @@ public class Not extends Exp {
 
   public Type accept(TypeVisitor v) {
     return v.visit(this);
+  }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
   }
 }

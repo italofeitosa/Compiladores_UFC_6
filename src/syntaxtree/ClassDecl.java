@@ -1,9 +1,11 @@
 package syntaxtree;
 
-import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
-public abstract class ClassDecl {
-  public abstract void accept(Visitor v);
-  public abstract Type accept(TypeVisitor v);
+public interface ClassDecl {
+  public void accept(Visitor v);
+  public Type accept(TypeVisitor v);
+  public translate.Exp accept(TranslateVisitor v);
 }
