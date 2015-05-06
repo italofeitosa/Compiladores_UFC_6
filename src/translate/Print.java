@@ -8,6 +8,7 @@ import tree.CJUMP;
 import tree.CONST;
 import tree.ESEQ;
 import tree.ExpList;
+import tree.EXP;
 import tree.JUMP;
 import tree.LABEL;
 import tree.MEM;

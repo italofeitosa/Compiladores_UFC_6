@@ -2,6 +2,7 @@ package translate;
 
 import temp.Label;
 import tree.Exp;
+import tree.EXP;
 import tree.Stm;
 
 public class ExCtx implements Ctx{
