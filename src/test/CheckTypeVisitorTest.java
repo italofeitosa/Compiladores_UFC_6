@@ -36,8 +36,7 @@ public class CheckTypeVisitorTest {
 			} catch (ParseException e) {
 				System.out.println("Lexer Error : \n" + e.toString());
 			}
-			System.out
-					.println("-----------------------------------------------");
+			System.out.println("-----------------------------------------------");
 			program.accept(new SymbolTableBuilderVisitor());
 			program.accept(new PrettyPrintVisitor());
 			program.accept(new TypeCheckerVisitor());
