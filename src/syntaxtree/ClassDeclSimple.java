@@ -1,8 +1,11 @@
 package syntaxtree;
+
+import translate.Translate;
 import visitor.Visitor;
 import visitor.TypeVisitor;
+import visitor.TranslateVisitor;
 
-public class ClassDeclSimple extends ClassDecl {
+public class ClassDeclSimple implements ClassDecl {
   public Identifier i;
   public VarDeclList vl;  
   public MethodDeclList ml;
@@ -18,4 +21,18 @@ public class ClassDeclSimple extends ClassDecl {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
+
+@Override
+public void accept(Translate translate) {
+	// TODO Auto-generated method stub
+	
 }
+
+}
+
+

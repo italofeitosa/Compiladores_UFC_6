@@ -1,5 +1,5 @@
 package syntaxtree;
-import visitor.Visitor;
+import translate.Translate;
 import visitor.TypeVisitor;
 
 public class VarDecl {
@@ -10,8 +10,8 @@ public class VarDecl {
     t=at; i=ai;
   }
 
-  public void accept(Visitor v) {
-    v.visit(this);
+  public void accept(Translate translate) {
+    translate.visit(this);
   }
 
   public Type accept(TypeVisitor v) {

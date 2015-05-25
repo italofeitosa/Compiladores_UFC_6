@@ -1,5 +1,6 @@
 package syntaxtree;
 
+import translate.Translate;
 import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
 import visitor.Visitor;
@@ -26,8 +27,19 @@ public class ClassDeclExtends implements ClassDecl {
 		return v.visit(this);
 	}
 
+	public String toString() {
+		return "class " + i + " extends " + j + "{ " + vl + " " + ml + " }";
+	}
+	
 	@Override
 	public translate.Exp accept(TranslateVisitor v) {
 		return v.visit(this);
 	}
+
+	@Override
+	public void accept(Translate translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
