@@ -1,4 +1,6 @@
 package syntaxtree;
+
+import visitor.TranslateVisitor;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
@@ -16,4 +18,8 @@ public class NewArray extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

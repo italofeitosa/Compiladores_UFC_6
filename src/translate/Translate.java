@@ -1,75 +1,75 @@
-package translate;
+package compiler.intermediateRepresentation.translate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import mipsFrame.MipsFrame;
-import symbolTable.Symbol;
-import syntaxtree.And;
-import syntaxtree.ArrayAssign;
-import syntaxtree.ArrayLength;
-import syntaxtree.ArrayLookup;
-import syntaxtree.Assign;
-import syntaxtree.Block;
-import syntaxtree.BooleanType;
-import syntaxtree.Call;
-import syntaxtree.ClassDeclExtends;
-import syntaxtree.ClassDeclSimple;
-import syntaxtree.False;
-import syntaxtree.Formal;
-import syntaxtree.Identifier;
-import syntaxtree.IdentifierExp;
-import syntaxtree.IdentifierType;
-import syntaxtree.If;
-import syntaxtree.IntArrayType;
-import syntaxtree.IntegerLiteral;
-import syntaxtree.IntegerType;
-import syntaxtree.LessThan;
-import syntaxtree.MainClass;
-import syntaxtree.MethodDecl;
-import syntaxtree.Minus;
-import syntaxtree.NewArray;
-import syntaxtree.NewObject;
-import syntaxtree.Not;
-import syntaxtree.Plus;
-import syntaxtree.Program;
-import syntaxtree.This;
-import syntaxtree.Times;
-import syntaxtree.True;
-import syntaxtree.VarDecl;
-import syntaxtree.While;
+import frame.Access;
+import frame.Frame;
 import temp.Label;
 import temp.Temp;
 import tree.BINOP;
 import tree.CALL;
-import tree.CJUMP;
 import tree.CONST;
 import tree.ESEQ;
-import tree.ExpList;
-import tree.JUMP;
-import tree.LABEL;
-import tree.MEM;
-import tree.MOVE;
-import tree.NAME;
-import tree.SEQ;
-import tree.Stm;
-import tree.TEMP;
-import visitor.TranslateVisitor;
-import frame.Access;
-import frame.Frame;
+import compiler.intermediateRepresentation.tree.expression.ExpList;
+import compiler.intermediateRepresentation.tree.expression.MEM;
+import compiler.intermediateRepresentation.tree.expression.NAME;
+import compiler.intermediateRepresentation.tree.expression.TEMP;
+import compiler.intermediateRepresentation.tree.statement.CJUMP;
+import compiler.intermediateRepresentation.tree.statement.JUMP;
+import compiler.intermediateRepresentation.tree.statement.LABEL;
+import compiler.intermediateRepresentation.tree.statement.MOVE;
+import compiler.intermediateRepresentation.tree.statement.SEQ;
+import compiler.intermediateRepresentation.tree.statement.Stm;
+import compiler.semantic.TranslateVisitor;
+import compiler.symbolTable.Symbol;
+import compiler.syntactical.And;
+import compiler.syntactical.ArrayAssign;
+import compiler.syntactical.ArrayLength;
+import compiler.syntactical.ArrayLookup;
+import compiler.syntactical.Assign;
+import compiler.syntactical.Block;
+import compiler.syntactical.BooleanType;
+import compiler.syntactical.Call;
+import compiler.syntactical.ClassDeclExtends;
+import compiler.syntactical.ClassDeclSimple;
+import compiler.syntactical.False;
+import compiler.syntactical.Formal;
+import compiler.syntactical.Identifier;
+import compiler.syntactical.IdentifierExp;
+import compiler.syntactical.IdentifierType;
+import compiler.syntactical.If;
+import compiler.syntactical.IntArrayType;
+import compiler.syntactical.IntegerLiteral;
+import compiler.syntactical.IntegerType;
+import compiler.syntactical.LessThan;
+import compiler.syntactical.MainClass;
+import compiler.syntactical.MethodDecl;
+import compiler.syntactical.Minus;
+import compiler.syntactical.NewArray;
+import compiler.syntactical.NewObject;
+import compiler.syntactical.Not;
+import compiler.syntactical.Plus;
+import compiler.syntactical.Print;
+import compiler.syntactical.Program;
+import compiler.syntactical.This;
+import compiler.syntactical.Times;
+import compiler.syntactical.True;
+import compiler.syntactical.VarDecl;
+import compiler.syntactical.While;
 
 public class Translate implements TranslateVisitor {
-	
+
 	private Frame currFrame;
 	private Frag frags = null;
 	private HashMap<String, Access> vars = null;
 	private HashMap<String, Integer> fieldVars = null;
-	private tree.Exp objPtr = null;
+	private compiler.intermediateRepresentation.tree.expression.Exp objPtr = null;
 
-	public Translate(MipsFrame mipsFrame) {
-		currFrame = mipsFrame;
+	public Translate(FrameImpl frameImpl) {
+		currFrame = frameImpl;
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class Translate implements TranslateVisitor {
 		// Stm s = (n.statements.accept(this)).unNx();
 		Stm s = null;
 
-		tree.Exp retExp = new CONST(
+		compiler.intermediateRepresentation.tree.expression.Exp retExp = new CONST(
 				0);
 		Stm body = new MOVE(new TEMP(currFrame.RV()), new ESEQ(s, retExp));
 
@@ -109,8 +109,8 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(ClassDeclExtends n) {
-		for (int i = 0; i < n.ml.size(); i++)
-			n.ml.elementAt(i).accept(this);
+		for (int i = 0; i < n.methodList.size(); i++)
+			n.methodList.elementAt(i).accept(this);
 		return null;
 	}
 
@@ -130,43 +130,43 @@ public class Translate implements TranslateVisitor {
 		int word = currFrame.wordSize();
 
 		Stm method = new SEQ(new LABEL(
-				new Label(n.i.toString())), null);
+				new Label(n.methodNameId.toString())), null);
 
 		List<Boolean> formal = new ArrayList<Boolean>();
-		for (int i = 0; i < n.fl.size(); i++) {
+		for (int i = 0; i < n.formalParamList.size(); i++) {
 			formal.add(false);
 		}
 		Frame oldFrame = currFrame;
 		Frame newFrame = currFrame.newFrame(
-				new Symbol(n.i.toString()), formal);
+				new Symbol(n.methodNameId.toString()), formal);
 		Access ac = currFrame.allocLocal(false);
 
 		// Frame oldFrame = currFrame;
 		currFrame = newFrame;
 
-		for (int i = 1; i < n.fl.size(); i++) {
-			tree.Exp addr = new BINOP(
+		for (int i = 1; i < n.formalParamList.size(); i++) {
+			compiler.intermediateRepresentation.tree.expression.Exp addr = new BINOP(
 					BINOP.MINUS, new TEMP(currFrame.FP()), new CONST(i * word));
 			Stm form = new MOVE(new TEMP(new Temp()), new MEM(addr));
 
 			method = new SEQ(method, form);
 		}
 
-		for (int i = 0; i < n.vl.size(); i++) {
-			method = new SEQ(method, n.vl.elementAt(i).accept(this)
+		for (int i = 0; i < n.localVarList.size(); i++) {
+			method = new SEQ(method, n.localVarList.elementAt(i).accept(this)
 					.unNx());
 		}
 
 		objPtr = ac.exp(new ESEQ(new MOVE(new TEMP(currFrame.FP()), new MEM(
 				new TEMP(currFrame.FP()))), new TEMP(currFrame.FP())));
 
-		Stm body = n.sl.elementAt(0).accept(this).unNx();
-		for (int i = 1; i < n.sl.size(); i++) {
-			body = new SEQ(body, n.sl.elementAt(i).accept(this)
+		Stm body = n.statementList.elementAt(0).accept(this).unNx();
+		for (int i = 1; i < n.statementList.size(); i++) {
+			body = new SEQ(body, n.statementList.elementAt(i).accept(this)
 					.unNx());
 		}
 		method = new SEQ(method, body);
-		tree.Exp e = new TEMP(
+		compiler.intermediateRepresentation.tree.expression.Exp e = new TEMP(
 				currFrame.RV());
 
 		procEntryExit(body);
@@ -210,8 +210,8 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(Block n) {
-		for (int i = 0; i < n.sl.size(); i++) {
-			n.sl.elementAt(i).accept(this);
+		for (int i = 0; i < n.stmtList.size(); i++) {
+			n.stmtList.elementAt(i).accept(this);
 		}
 		return null;
 	}
@@ -247,7 +247,7 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(Print n) {
-		tree.Exp e1 = null;
+		compiler.intermediateRepresentation.tree.expression.Exp e1 = null;
 		if (n.intExpr != null) {
 			e1 = (n.intExpr.accept(this)).unEx();
 		}
@@ -256,9 +256,9 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(Assign n) {
-		tree.Exp i = n.varId
+		compiler.intermediateRepresentation.tree.expression.Exp i = n.varId
 				.accept(this).unEx();
-		tree.Exp e = n.valueExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e = n.valueExpr
 				.accept(this).unEx();
 
 		return new Nx(new MOVE(i, e));
@@ -266,11 +266,11 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(ArrayAssign n) {
-		tree.Exp e1 = (n.indexExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e1 = (n.indexExpr
 				.accept(this)).unEx();
-		tree.Exp e2 = (n.valueExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e2 = (n.valueExpr
 				.accept(this)).unEx();
-		tree.Exp expId = (n.i
+		compiler.intermediateRepresentation.tree.expression.Exp expId = (n.i
 				.accept(this)).unEx();
 		return new Nx(new MOVE(new BINOP(BINOP.PLUS, new MEM(expId), new BINOP(
 				BINOP.MUL, e1, new CONST(4))), e2));
@@ -283,9 +283,9 @@ public class Translate implements TranslateVisitor {
 		Label ok1 = new Label();
 		Label ok2 = new Label();
 
-		tree.Exp left = n.e1
+		compiler.intermediateRepresentation.tree.expression.Exp left = n.e1
 				.accept(this).unEx();
-		tree.Exp right = n.e2
+		compiler.intermediateRepresentation.tree.expression.Exp right = n.e2
 				.accept(this).unEx();
 		return new Ex(new ESEQ(new SEQ(new SEQ(new SEQ(new SEQ(new SEQ(
 				new MOVE(new TEMP(t1), new CONST(0)), new CJUMP(CJUMP.EQ, left,
@@ -311,27 +311,27 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(Plus n) {
-		tree.Exp exp1 = (n.e1
+		compiler.intermediateRepresentation.tree.expression.Exp exp1 = (n.e1
 				.accept(this)).unEx();
-		tree.Exp exp2 = (n.e2
+		compiler.intermediateRepresentation.tree.expression.Exp exp2 = (n.e2
 				.accept(this)).unEx();
 		return new Ex(new BINOP(BINOP.PLUS, exp1, exp2));
 	}
 
 	@Override
 	public Exp visit(Minus n) {
-		tree.Exp exp1 = (n.e1
+		compiler.intermediateRepresentation.tree.expression.Exp exp1 = (n.e1
 				.accept(this)).unEx();
-		tree.Exp exp2 = (n.e2
+		compiler.intermediateRepresentation.tree.expression.Exp exp2 = (n.e2
 				.accept(this)).unEx();
 		return new Ex(new BINOP(BINOP.MINUS, exp1, exp2));
 	}
 
 	@Override
 	public Exp visit(Times n) {
-		tree.Exp exp1 = (n.e1
+		compiler.intermediateRepresentation.tree.expression.Exp exp1 = (n.e1
 				.accept(this)).unEx();
-		tree.Exp exp2 = (n.e2
+		compiler.intermediateRepresentation.tree.expression.Exp exp2 = (n.e2
 				.accept(this)).unEx();
 		return new Ex(new BINOP(BINOP.MUL, exp1, exp2));
 	}
@@ -340,9 +340,9 @@ public class Translate implements TranslateVisitor {
 	public Exp visit(ArrayLookup n) {
 		Temp t_index = new Temp();
 		Temp t_size = new Temp();
-		tree.Exp e1 = n.arrayExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e1 = n.arrayExpr
 				.accept(this).unEx();
-		tree.Exp e2 = n.indexExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e2 = n.indexExpr
 				.accept(this).unEx();
 
 		Label F = new Label();
@@ -409,7 +409,7 @@ public class Translate implements TranslateVisitor {
 
 	@Override
 	public Exp visit(NewArray n) {
-		tree.Exp e = n.sizeExpr
+		compiler.intermediateRepresentation.tree.expression.Exp e = n.sizeExpr
 				.accept(this).unEx();
 		ExpList params = new ExpList(e, null);
 		Temp t = new Temp();
@@ -426,7 +426,7 @@ public class Translate implements TranslateVisitor {
 	@Override
 	public Exp visit(Not n) {
 		return new Ex(new BINOP(BINOP.MINUS, new CONST(1),
-				(n.e.accept(this)).unEx()));
+				(n.boolExpr.accept(this)).unEx()));
 	}
 
 	@Override
@@ -434,7 +434,7 @@ public class Translate implements TranslateVisitor {
 		return new Ex(new TEMP(currFrame.FP()));
 	}
 
-	private tree.Exp getIdTree(
+	private compiler.intermediateRepresentation.tree.expression.Exp getIdTree(
 			String id) {
 		Access a = null;
 
@@ -451,5 +451,4 @@ public class Translate implements TranslateVisitor {
 			return new MEM(new BINOP(BINOP.PLUS, objPtr, new CONST(0)));
 		}
 	}
-
-	}
+}

@@ -1,8 +1,11 @@
 package syntaxtree;
+
+import visitor.TranslateVisitor;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
 public class LessThan extends Exp {
+
   public Exp e1,e2;
   
   public LessThan(Exp ae1, Exp ae2) {
@@ -16,4 +19,8 @@ public class LessThan extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

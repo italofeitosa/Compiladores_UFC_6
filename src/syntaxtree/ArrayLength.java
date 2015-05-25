@@ -1,5 +1,7 @@
 package syntaxtree;
+
 import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
 
 public class ArrayLength extends Exp {
@@ -16,4 +18,8 @@ public class ArrayLength extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

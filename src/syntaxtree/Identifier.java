@@ -4,6 +4,7 @@ import compiler.lexical.Token;
 
 import visitor.Visitor;
 import visitor.TypeVisitor;
+import visitor.TranslateVisitor;
 
 public class Identifier extends Exp {
 	  public String s;
@@ -38,6 +39,8 @@ public class Identifier extends Exp {
 	    return s + ":" + tok.beginLine;
 	  }
 	  
-	  
+	  public translate.Exp accept(TranslateVisitor v) {
+			return v.visit(this);
+		}
 
 	}

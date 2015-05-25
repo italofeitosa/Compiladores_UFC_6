@@ -1,6 +1,5 @@
 package tree;
-import temp.Temp;
-import temp.Label;
+
 public class Exp extends Stm {
   public Exp exp; 
   //public EXP(Exp e) {exp=e;}

@@ -21,4 +21,5 @@ public class Not extends Exp {
   public translate.Exp accept(TranslateVisitor v) {
 		return v.visit(this);
   }
+
 }

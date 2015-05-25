@@ -1,8 +1,11 @@
 package typecheck;
 
+import visitor.TypeVisitor;
+import symbolTable.ClassDescriptor;
+import symbolTable.MethodDescriptor;
+import symbolTable.SymbolTable;
+import symbolTable.VariableDescriptor;
 import syntaxtree.*;
-import visitor.*;
-import symbolTable.*;
 
 public class TypeCheckerVisitor implements TypeVisitor {
 	private SymbolTable symbolTable;
@@ -52,8 +55,8 @@ public class TypeCheckerVisitor implements TypeVisitor {
 		for (VarDecl vl : mainC.localVars.getList())
 			vl.accept(this);
 
-		for (Statement stmt : mainC.s.getList())
-			stmt.accept(this);
+		for (Statement s : mainC.s.getList())
+			s.accept(this);
 
 		currentMethod = null;
 		currentClass = null;
@@ -61,8 +64,8 @@ public class TypeCheckerVisitor implements TypeVisitor {
 	}
 
 	public Type visit(ClassDeclSimple classDecl) {
-		String name = classDecl.i.toString();
-		currentClass = symbolTable.getClass(name);
+		String s = classDecl.i.toString();
+		currentClass = symbolTable.getClass(s);
 
 		for (VarDecl varD : classDecl.vl.getList())
 			varD.accept(this);
@@ -75,8 +78,8 @@ public class TypeCheckerVisitor implements TypeVisitor {
 	}
 
 	public Type visit(ClassDeclExtends classDecl) {
-		String name = classDecl.i.toString();
-		currentClass = symbolTable.getClass(name);
+		String s = classDecl.i.toString();
+		currentClass = symbolTable.getClass(s);
 
 		for (VarDecl varD : classDecl.vl.getList())
 			varD.accept(this);
@@ -103,8 +106,8 @@ public class TypeCheckerVisitor implements TypeVisitor {
 		for (VarDecl varDecl : methodDecl.vl.getList())
 			varDecl.accept(this);
 
-		for (Statement stmt : methodDecl.sl.getList())
-			stmt.accept(this);
+		for (Statement s : methodDecl.sl.getList())
+			s.accept(this);
 
 		Type methodType = methodDecl.t;
 		Type returnType = methodDecl.e.accept(this);
@@ -142,8 +145,8 @@ public class TypeCheckerVisitor implements TypeVisitor {
 	}
 
 	public Type visit(Block block) {
-		for (Statement stmt : block.sl.getList())
-			stmt.accept(this);
+		for (Statement s : block.sl.getList())
+			s.accept(this);
 		return null;
 	}
 
@@ -282,7 +285,7 @@ public class TypeCheckerVisitor implements TypeVisitor {
 
 	public Type visit(ArrayLookup arrayLookup) {
 		Type expArr = arrayLookup.e1.accept(this);
-		Type expInd = arrayLookup.e2.accept(this);
+		Type expInd = arrayLookup.e1.accept(this);
 		Type intT = IntegerType.instance();
 		Type arrayT = IntArrayType.instance();
 

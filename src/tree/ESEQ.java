@@ -1,6 +1,6 @@
 package tree;
-import temp.Temp;
-import temp.Label;
+
+
 public class ESEQ extends Exp {
   public Stm stm;
   public Exp exp;

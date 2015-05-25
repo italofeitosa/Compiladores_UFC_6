@@ -1,8 +1,11 @@
 package syntaxtree;
+
 import visitor.Visitor;
 import visitor.TypeVisitor;
+import visitor.TranslateVisitor;
 
 public class IdentifierExp extends Exp {
+	
   public String s;
   public IdentifierExp(String as) { 
     s=as;
@@ -15,4 +18,8 @@ public class IdentifierExp extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

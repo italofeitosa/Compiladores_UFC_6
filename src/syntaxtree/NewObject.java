@@ -1,6 +1,8 @@
 package syntaxtree;
+
 import visitor.Visitor;
 import visitor.TypeVisitor;
+import visitor.TranslateVisitor;
 
 public class NewObject extends Exp {
   public Identifier i;
@@ -16,4 +18,8 @@ public class NewObject extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }

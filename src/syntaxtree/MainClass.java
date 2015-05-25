@@ -5,6 +5,7 @@ import visitor.TypeVisitor;
 import visitor.Visitor;
 
 public class MainClass {
+	
 	  public Identifier i1,i2;
 	  public StatementList s;
 	  public VarDeclList localVars;
@@ -21,7 +22,7 @@ public class MainClass {
 	    return v.visit(this);
 	  }
 	  
-	  public tree.Exp accept(TranslateVisitor v) {
+	  public translate.Exp accept(TranslateVisitor v) {
 			return v.visit(this);
-	  }
+		}
 	}
