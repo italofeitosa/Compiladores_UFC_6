@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import mipsFrame.MipsFrame;
 import frame.Access;
 import frame.Frame;
 import temp.Label;
@@ -35,8 +36,8 @@ public class Translate implements TranslateVisitor {
 	private HashMap<String, Integer> fieldVars = null;
 	private tree.Exp objPtr = null;
 
-	public Translate(FrameImpl frameImpl) {
-		currFrame = frameImpl;
+	public Translate(MipsFrame mipsFrame) {
+		currFrame = mipsFrame;
 	}
 
 	@Override
@@ -213,7 +214,7 @@ public class Translate implements TranslateVisitor {
 	}
 
 	@Override
-	public Exp visit(Print n) {
+	public Exp visit(syntaxtree.Print n) {
 		tree.Exp e1 = null;
 		if (n.e != null) {
 			e1 = (n.e.accept(this)).unEx();

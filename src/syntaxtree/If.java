@@ -1,8 +1,9 @@
 package syntaxtree;
+import visitor.TranslateVisitor;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
-public class If extends Statement {
+public class If implements Statement {
   public Exp e;
   public Statement s1,s2;
 
@@ -17,5 +18,10 @@ public class If extends Statement {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+
+@Override
+public translate.Exp accept(TranslateVisitor v) {
+	return v.visit(this);
+}
 }
 

@@ -26,13 +26,6 @@ public class ClassDeclSimple implements ClassDecl {
   public translate.Exp accept(TranslateVisitor v) {
 		return v.visit(this);
 	}
-
-@Override
-public void accept(Translate translate) {
-	// TODO Auto-generated method stub
-	
-}
-
 }
 
 

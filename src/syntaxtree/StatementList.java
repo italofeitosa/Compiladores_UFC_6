@@ -3,13 +3,15 @@ package syntaxtree;
 import java.util.List;
 import java.util.Vector;
 
+import translate.Exp;
 import visitor.DepthFirstVisitor;
 import visitor.PrettyPrintVisitor;
+import visitor.TranslateVisitor;
 import visitor.TypeDepthFirstVisitor;
 import visitor.TypeVisitor;
 import visitor.Visitor;
 
-public class StatementList extends Statement {
+public class StatementList {
 	private Vector<Statement> list;
 
 	public StatementList() {
@@ -43,17 +45,4 @@ public class StatementList extends Statement {
 
 		return sb.toString();
 	}
-
-	@Override
-	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Type accept(TypeVisitor v) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

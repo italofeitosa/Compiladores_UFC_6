@@ -2,7 +2,7 @@ package syntaxtree;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
-public class ArrayAssign extends Statement {
+public class ArrayAssign implements Statement {
   public Identifier i;
   public Exp e1,e2;
 

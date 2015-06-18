@@ -73,4 +73,5 @@ public interface TranslateVisitor{
     public Exp visit(NewObject n);
     public Exp visit(Not n);
     public Exp visit(Identifier n);
+	//Exp visit(translate.Print n);
 }

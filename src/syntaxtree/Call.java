@@ -27,4 +27,9 @@ public class Call extends Exp {
  /* public List<Call> getList() {
 	     return el;
 }*/
+
+public Type getType() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

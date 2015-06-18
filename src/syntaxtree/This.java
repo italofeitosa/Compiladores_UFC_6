@@ -12,8 +12,13 @@ public class This extends Exp {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
-  
+
   public translate.Exp accept(TranslateVisitor v) {
 		return v.visit(this);
 	}
+
+public Type getType() {
+	// TODO Auto-generated method stub
+	return null;
 }
+  }

@@ -1,8 +1,9 @@
 package syntaxtree;
-import visitor.Visitor;
+import visitor.TranslateVisitor;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
-public class Print extends Statement {
+public class Print implements Statement {
   public Exp e;
 
   public Print(Exp ae) {
@@ -16,4 +17,12 @@ public class Print extends Statement {
   public Type accept(TypeVisitor v) {
     return v.visit(this);
   }
+  
+  public String toString() {
+		return "System.out.println(" + e + ");\n";
+	}
+  
+  public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
 }
