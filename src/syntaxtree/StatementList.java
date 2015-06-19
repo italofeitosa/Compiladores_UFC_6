@@ -3,14 +3,6 @@ package syntaxtree;
 import java.util.List;
 import java.util.Vector;
 
-import translate.Exp;
-import visitor.DepthFirstVisitor;
-import visitor.PrettyPrintVisitor;
-import visitor.TranslateVisitor;
-import visitor.TypeDepthFirstVisitor;
-import visitor.TypeVisitor;
-import visitor.Visitor;
-
 public class StatementList {
 	private Vector<Statement> list;
 

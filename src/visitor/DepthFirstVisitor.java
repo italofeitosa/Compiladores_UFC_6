@@ -18,7 +18,7 @@ public class DepthFirstVisitor implements Visitor {
   public void visit(MainClass n) {
     n.i1.accept(this);
     n.i2.accept(this);
-    n.s.accept(this);
+    //n.s.accept(this);
   }
   
   // Identifier i;

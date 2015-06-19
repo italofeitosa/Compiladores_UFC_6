@@ -1,9 +1,10 @@
 package syntaxtree;
 
+import visitor.TranslateVisitor;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
-public class Block extends Statement {
+public class Block implements Statement {
   public StatementList sl;
 
   public Block(StatementList asl) {
@@ -21,5 +22,10 @@ public class Block extends Statement {
   public String toString() {
 		return "{" + sl + "}\n";
 	}
+	
+	public translate.Exp accept(TranslateVisitor v) {
+		return v.visit(this);
+	}
+
 }
 

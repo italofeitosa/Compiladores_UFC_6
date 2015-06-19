@@ -24,9 +24,17 @@ public class PrettyPrintVisitor implements Visitor {
     n.i2.accept(this);
     System.out.println(") {");
     System.out.print("    ");
-    n.s.accept(this);
     System.out.println("  }");
     System.out.println("}");
+    for (int i = 0; i < n.localVars.size(); i++) {
+		n.localVars.elementAt(i).accept(this);
+	}
+	for (int i = 0; i < n.s.size(); i++) {
+		n.s.elementAt(i).accept(this);
+	}
+	System.out.println("  }");
+	System.out.println("}");
+
   }
 
   // Identifier i;

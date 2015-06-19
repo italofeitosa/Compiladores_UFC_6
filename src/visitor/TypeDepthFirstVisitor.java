@@ -19,7 +19,7 @@ public class TypeDepthFirstVisitor implements TypeVisitor {
   public Type visit(MainClass n) {
     n.i1.accept(this);
     n.i2.accept(this);
-    n.s.accept(this);
+   // n.s.accept(this);
     return null;
   }
   
