@@ -13,9 +13,8 @@ import compiler.lexical.MiniJavaParser;
 import compiler.lexical.ParseException;
 
 public class CheckTypeVisitorTest {
-	private static final String FILES[] = { "Factorial", "BinarySearch",
-			"BinaryTree", "BubbleSort", "LinearSearch", "LinkedList",
-			"QuickSort", "TreeVisitor" };
+	private static final String FILES[] = //{ "Factorial",
+		{"QuickSort" };
 	private static final String TEST_FILES_FOLDER = "programFiles/";
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -37,9 +36,11 @@ public class CheckTypeVisitorTest {
 				System.out.println("Lexer Error : \n" + e.toString());
 			}
 			System.out.println("-----------------------------------------------");
+			SymbolTableBuilderVisitor symbolTableBuilderVisitor = new SymbolTableBuilderVisitor();
+			symbolTableBuilderVisitor.visit(program.m);
 			program.accept(new SymbolTableBuilderVisitor());
-			program.accept(new PrettyPrintVisitor());
-			program.accept(new TypeCheckerVisitor());
+			//program.accept(new PrettyPrintVisitor());
+			//program.accept(new TypeCheckerVisitor());
 		}
 	}
 }

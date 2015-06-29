@@ -1,5 +1,5 @@
-class Factorial{
-    public static void main(String[] a){
+class Factorial
+    public static void main(String[){
 	System.out.println(new Fac().ComputeFac(10));
     }
 }
